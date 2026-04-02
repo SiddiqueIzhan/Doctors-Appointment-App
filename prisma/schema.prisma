@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User{
+  // common fields
+  id String @id @default(uuid())
+  clerkUserId String @unique 
+  email String @unique
+  name String 
+  imageUrl String?
+  role UserRole @default(UNASSIGNED) // UNASSIGNED, PATIENT, DOCTOR, ADMIN
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // user specific details
+  credits Int @default(2) // accumuated credit balance
+
+  // Doctor Specific fields
+  speciality String? 
+  experience Int?
+  credentialURL String?
+  description String?
+  verificationStatus VerificationStatus? @default(PENDING)
+
+  //relations
+  patientAppointments Appointment[] @relation("PatientAppointments")
+  doctorAppointments Appointment[] @relation("DoctorAppointments")
+  availabilities Availability[]
+  transactions CreditTransaction[]  
+}
+
+enum UserRole {
+  UNASSIGNED
+  PATIENT
+  DOCTOR
+  ADMIN
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+model Availability {
+  id String @id @default(uuid())
+  doctorId String
+  doctor User @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  startTime DateTime
+  endTime DateTime
+  status SlotStatus @default(AVAILABLE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index ([startTime, doctorId])
+}
+
+model Appointment {
+  id String @id @default(uuid())
+  patientId String
+  patient User @relation("PatientAppointments", fields: [patientId], references: [id], onDelete: Cascade)
+  doctorId String
+  doctor User @relation("DoctorAppointments", fields: [doctorId], references: [id], onDelete: Cascade)
+  startTime DateTime
+  endTime DateTime
+  status AppointmentStatus @default(SCHEDULED)
+  notes String? 
+  patientDescription String?
+
+  //Video Session Fields
+  videoSessionId String? // vonage video API Session ID
+  videoSessionToken String? // Optional: can store tokens if needed
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index ([startTime, doctorId])
+  @@index([startTime, status])
+}
+
+enum SlotStatus {
+  AVAILABLE
+  BOOKED
+  BLOCKED
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+model CreditTransaction {
+  id String @id @default(uuid())
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type TransactionType
+  amount Int
+  packageID String? // reference to which package was purchased
+  createdAt DateTime @default(now())
+}
+
+enum TransactionType {
+  CREDIT_PURCHASE // credits purchased through Clerk billing
+  APPOINTMENT_DEDUCTION // Credit used for appointment
+  ADMIN_ADJUSTMENT // manual adjustment by admin
+}
+
+
+
+
+
+
+
+
