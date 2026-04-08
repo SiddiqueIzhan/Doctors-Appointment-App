@@ -9,10 +9,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { checkUser } from "@/lib/checkUser";
-import { Calendar, Shield, Stethoscope, User } from "lucide-react";
+import { Calendar, CreditCard, Shield, Stethoscope, User } from "lucide-react";
+import { Badge } from "./ui/badge";
+import {
+  checkAndAllocateCredits,
+  UserWithTransactions,
+} from "@/actions/credits";
 
 const Header = async () => {
-  const user = await checkUser();
+  const user: UserWithTransactions | null = await checkUser();
+  if (user?.role === "PATIENT") {
+    await checkAndAllocateCredits(user);
+  }
+
   return (
     <header className="fixed top-0 w-full border-b bg-background/80 z-10 backdrop-blur-md supports-backdrop-filter:bg-background/60">
       <nav className="container mx-auto px-12 h-16 flex items-center justify-between">
@@ -26,17 +35,6 @@ const Header = async () => {
           />
         </Link>
         <div className="w-1/5 flex items-center justify-between">
-          <SignedOut>
-            <SignInButton>
-              <Button variant="secondary">Sign In</Button>
-            </SignInButton>
-            {/* <SignUpButton>
-              <button className="bg-[#6c47ff] text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
-                Sign Up
-              </button>
-            </SignUpButton> */}
-          </SignedOut>
-          {/* Show the user button when the user is signed in */}
           <SignedIn>
             {user?.role === "UNASSIGNED" && (
               <Link href="/onboarding">
@@ -53,7 +51,7 @@ const Header = async () => {
               </Link>
             )}
             {user?.role === "DOCTOR" && (
-              <Link href="/doctor">
+              <Link href="/doctors">
                 <Button
                   variant="outline"
                   className="hidden md:inline-flex items-center gap-2"
@@ -94,9 +92,36 @@ const Header = async () => {
                 </Button>
               </Link>
             )}
+            {(!user || user?.role === "PATIENT") && (
+              <Link href="/pricing">
+                <Badge
+                  variant="outline"
+                  className="h-9 bg-emerald-900/20 border-emerald-700/30 px-3 py-1 flex items-center gap-2"
+                >
+                  <CreditCard className="h-3.5 w-3.5 text-emerald-400" />
+                  <span className="text-emerald-400">
+                    {user && user?.role === "PATIENT" ? (
+                      <>
+                        {user.credits}{" "}
+                        <span className="hidden md:inline">Credits</span>
+                      </>
+                    ) : (
+                      <>Pricing</>
+                    )}
+                  </span>
+                </Badge>
+              </Link>
+            )}
 
             <UserButton />
           </SignedIn>
+
+          <SignedOut>
+            <SignInButton>
+              <Button variant="secondary">Sign In</Button>
+            </SignInButton>
+          </SignedOut>
+          {/* Show the user button when the user is signed in */}
         </div>
       </nav>
     </header>

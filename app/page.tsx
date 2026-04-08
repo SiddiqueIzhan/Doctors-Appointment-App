@@ -1,3 +1,4 @@
+import Pricing from "@/components/Pricing";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -112,6 +113,7 @@ export default function Home() {
               needs
             </p>
           </div>
+          <Pricing />
           <div>
             <Card className="mt-12 bg-muted/20 border-emerald-900/30">
               <CardHeader>

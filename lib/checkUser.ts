@@ -1,22 +1,43 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "./prisma";
+import { Prisma } from "./generated/prisma/client";
+import { UserWithTransactions } from "@/actions/credits";
 
 export const checkUser = async () => {
   try {
-    const user = await currentUser();
+    const user = await currentUser(); // get the authenticated user
 
     if (user) {
       const loggedInUser = await db.user.findUnique({
         where: {
-          clerkUserId: user?.id,
+          clerkUserId: user?.id, // find logged in user inside the database
+        },
+        include: {
+          transactions: {
+            where: {
+              type: "CREDIT_PURCHASE",
+              createdAt: {
+                gte: new Date(
+                  new Date().getFullYear(),
+                  new Date().getMonth(),
+                  1,
+                ), // get the latest credit purchase plan along with user details
+              },
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+            take: 1,
+          },
         },
       });
 
-      if (loggedInUser) return loggedInUser;
+      if (loggedInUser) return loggedInUser; // if user exits return user
 
       const name = `${user?.firstName} ${user?.lastName}`;
 
       const newUser = await db.user.create({
+        // if user does exits create user
         data: {
           clerkUserId: user.id,
           name,
@@ -30,11 +51,15 @@ export const checkUser = async () => {
             },
           },
         },
+        include: {
+          transactions: true
+        }
       });
       return newUser;
     }
     return null;
   } catch (error) {
     console.log(error);
+    return null;
   }
 };
