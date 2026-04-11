@@ -2,7 +2,6 @@ import Pricing from "@/components/Pricing";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 
 const PricingPage = () => {
   return (

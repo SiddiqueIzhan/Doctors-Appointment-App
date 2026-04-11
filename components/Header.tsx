@@ -51,7 +51,7 @@ const Header = async () => {
               </Link>
             )}
             {user?.role === "DOCTOR" && (
-              <Link href="/doctors">
+              <Link href="/doctor">
                 <Button
                   variant="outline"
                   className="hidden md:inline-flex items-center gap-2"

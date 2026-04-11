@@ -5,7 +5,7 @@ interface MainLayoutProps {
 }
 
 const MainLayout = ({ children }: MainLayoutProps) => {
-  return <div className="container mx-auto my-20 px-20  ">{children}</div>;
+  return <div className="container mx-auto my-28 px-20">{children}</div>;
 };
 
 export default MainLayout;
