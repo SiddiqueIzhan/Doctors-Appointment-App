@@ -9,7 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { checkUser } from "@/lib/checkUser";
-import { Calendar, CreditCard, Shield, Stethoscope, User } from "lucide-react";
+import { Calendar, CreditCard, ShieldCheck, Stethoscope, User } from "lucide-react";
 import { Badge } from "./ui/badge";
 import {
   checkAndAllocateCredits,
@@ -84,11 +84,11 @@ const Header = async () => {
                   variant="outline"
                   className="hidden md:inline-flex items-center gap-2"
                 >
-                  <Shield className="h-4 w-4" />
+                  <ShieldCheck className="h-4 w-4" />
                   Admin Dashboard
                 </Button>
                 <Button variant="ghost" className="md:hidden w-10 h-10 p-0">
-                  <Shield className="h-4 w-4" />
+                  <ShieldCheck className="h-4 w-4" />
                 </Button>
               </Link>
             )}

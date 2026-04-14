@@ -1,7 +1,5 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "./prisma";
-import { Prisma } from "./generated/prisma/client";
-import { UserWithTransactions } from "@/actions/credits";
 
 export const checkUser = async () => {
   try {
@@ -52,8 +50,8 @@ export const checkUser = async () => {
           },
         },
         include: {
-          transactions: true
-        }
+          transactions: true,
+        },
       });
       return newUser;
     }
