@@ -9,7 +9,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { checkUser } from "@/lib/checkUser";
-import { Calendar, CreditCard, ShieldCheck, Stethoscope, User } from "lucide-react";
+import {
+  Calendar,
+  CreditCard,
+  ShieldCheck,
+  Stethoscope,
+  User,
+} from "lucide-react";
 import { Badge } from "./ui/badge";
 import {
   checkAndAllocateCredits,
@@ -40,12 +46,12 @@ const Header = async () => {
               <Link href="/onboarding">
                 <Button
                   variant="outline"
-                  className="hidden md:inline-flex items-center gap-2"
+                  className="hidden md:inline-flex items-center gap-2  cursor-pointer"
                 >
                   <User className="h-4 w-4" />
                   Complete Profile
                 </Button>
-                <Button variant="ghost" className="md:hidden w-10 h-10 p-0">
+                <Button variant="ghost" className="md:hidden w-10 h-10 p-0 cursor-pointer">
                   <User className="h-4 w-4" />
                 </Button>
               </Link>
@@ -54,12 +60,12 @@ const Header = async () => {
               <Link href="/doctor">
                 <Button
                   variant="outline"
-                  className="hidden md:inline-flex items-center gap-2"
+                  className="hidden md:inline-flex items-center gap-2 cursor-pointer"
                 >
                   <Stethoscope className="h-4 w-4" />
                   Doctor Dashboard
                 </Button>
-                <Button variant="ghost" className="md:hidden w-10 h-10 p-0">
+                <Button variant="ghost" className="md:hidden w-10 h-10 p-0 cursor-pointer">
                   <Stethoscope className="h-4 w-4" />
                 </Button>
               </Link>
@@ -68,12 +74,12 @@ const Header = async () => {
               <Link href="/appointments">
                 <Button
                   variant="outline"
-                  className="hidden md:inline-flex items-center gap-2"
+                  className="hidden md:inline-flex items-center gap-2 cursor-pointer"
                 >
                   <Calendar className="h-4 w-4" />
                   My Appointments
                 </Button>
-                <Button variant="ghost" className="md:hidden w-10 h-10 p-0">
+                <Button variant="ghost" className="md:hidden w-10 h-10 p-0 cursor-pointer">
                   <Calendar className="h-4 w-4" />
                 </Button>
               </Link>
@@ -118,7 +124,7 @@ const Header = async () => {
 
           <SignedOut>
             <SignInButton>
-              <Button variant="secondary">Sign In</Button>
+              <Button variant="secondary" className="cursor-pointer">Sign In</Button>
             </SignInButton>
           </SignedOut>
           {/* Show the user button when the user is signed in */}

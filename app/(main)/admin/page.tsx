@@ -12,7 +12,7 @@ const AdminPage = async () => {
   return (
     <div className="col-span-3">
       <TabsContent value="pending">
-        <PendingDoctors doctors={pendingDoctors.doctors || [] } />
+        <PendingDoctors doctors={pendingDoctors.doctors || []} />
       </TabsContent>
       <TabsContent value="doctors">
         <VerifiedDoctors doctors={verifiedDoctors.doctors || []} />

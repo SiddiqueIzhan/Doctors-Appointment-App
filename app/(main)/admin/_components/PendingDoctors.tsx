@@ -126,7 +126,7 @@ const PendingDoctors = ({ doctors }: PendingDoctorProps) => {
                   </Badge>
                   <Button
                     variant="outline"
-                    className="rounded-full p-2"
+                    className="rounded-full p-2 cursor-pointer"
                     onClick={() => setSelectedDoctor(doc)}
                   >
                     <View className="w-4 h-4" />
@@ -230,7 +230,7 @@ const PendingDoctors = ({ doctors }: PendingDoctorProps) => {
 
             <DialogFooter className="w-full flex justify-between">
               <Button
-                className="w-fit flex items-center gap-2 font-bold bg-red-500 hover:bg-red-400 text-white"
+                className="w-fit flex items-center gap-2 font-bold bg-red-500 hover:bg-red-400 text-white cursor-pointer"
                 disabled={loading}
                 onClick={() =>
                   handleUpdateStatus(selectedDoctor.id, "REJECTED")
@@ -240,7 +240,7 @@ const PendingDoctors = ({ doctors }: PendingDoctorProps) => {
                 Reject
               </Button>
               <Button
-                className="w-fit flex items-center gap-2 bg-green-500 hover:bg-green-400 font-bold text-white"
+                className="w-fit flex items-center gap-2 bg-green-500 hover:bg-green-400 font-bold text-white cursor-pointer"
                 disabled={loading}
                 onClick={() =>
                   handleUpdateStatus(selectedDoctor.id, "VERIFIED")

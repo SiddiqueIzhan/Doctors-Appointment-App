@@ -33,7 +33,7 @@ const AdminLayout = async ({ children }: LayoutProps) => {
         >
           <TabsTrigger
             value="pending"
-            className="w-full px-4 py-4"
+            className="w-full px-4 py-4 hover:bg-muted/40 cursor-pointer"
           >
             <AlertCircle className="w-4 h-4"/>
             Pending Verifications
@@ -41,7 +41,7 @@ const AdminLayout = async ({ children }: LayoutProps) => {
 
           <TabsTrigger
             value="doctors"
-            className="w-full px-4 py-4"
+            className="w-full px-4 py-4 hover:bg-muted/40 cursor-pointer"
           >
             <Users className="w-4 h-4" />
             Doctors

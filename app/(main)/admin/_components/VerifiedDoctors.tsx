@@ -84,7 +84,7 @@ const VerifiedDoctors = ({ doctors }: verifiedDoctorProps) => {
           />
         </div>
       </CardHeader>
-      <CardContent className="space-x-2">
+      <CardContent className="space-y-2">
         {filteredDoctors().length === 0 ? (
           <p className="w-full font-medium text-muted-foreground text-center">
             No Verified Doctors Found
@@ -106,7 +106,7 @@ const VerifiedDoctors = ({ doctors }: verifiedDoctorProps) => {
                     )}
                   </div>
 
-                  <div className="space-x-2">
+                  <div className="space-y-2">
                     <h1 className="text-lg font-bold">{name}</h1>
                     <p className="text-sm text-muted-foreground">
                       {speciality} | {experience} years of experience
@@ -123,7 +123,7 @@ const VerifiedDoctors = ({ doctors }: verifiedDoctorProps) => {
                   </Badge>
                   <Button
                     variant="outline"
-                    className="p-4 bg-red-500/20 text-red-400 border-red-400 rounded-sm"
+                    className="p-4 bg-red-500/20 text-red-400 border-red-400 rounded-sm cursor-pointer"
                     onClick={() => handleSuspend(doc)}
                   >
                     {loading && targetDoctor?.id === doc.id ? (

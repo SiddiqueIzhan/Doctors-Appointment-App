@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "./button";
 
 interface PageHeaderProps {
-  icon: LucideIcon;
+  icon?: LucideIcon;
   title: string;
   backLink?: string;
   backLabel?: string;
@@ -22,7 +22,7 @@ export function PageHeader({
         <Button
           variant="outline"
           size="sm"
-          className="mb-2 border-emerald-900/30"
+          className="mb-2 border-emerald-900/30 cursor-pointer"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           {backLabel}

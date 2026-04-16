@@ -94,13 +94,13 @@ export default async function VerificationPage() {
                   <Button
                     asChild
                     variant="outline"
-                    className="border-emerald-900/30"
+                    className="border-emerald-900/30 cursor-pointer"
                   >
                     <Link href="/">Return to Home</Link>
                   </Button>
                   <Button
                     asChild
-                    className="bg-emerald-600 hover:bg-emerald-700"
+                    className="bg-emerald-600 hover:bg-emerald-700 cursor-pointer"
                   >
                     <Link href="/doctor/update-profile">Update Profile</Link>
                   </Button>
@@ -110,13 +110,13 @@ export default async function VerificationPage() {
                   <Button
                     asChild
                     variant="outline"
-                    className="border-emerald-900/30"
+                    className="border-emerald-900/30 cursor-pointer"
                   >
                     <Link href="/">Return to Home</Link>
                   </Button>
                   <Button
                     asChild
-                    className="bg-emerald-600 hover:bg-emerald-700"
+                    className="bg-emerald-600 hover:bg-emerald-700 cursor-pointer"
                   >
                     <Link href="/contact-support">Contact Support</Link>
                   </Button>

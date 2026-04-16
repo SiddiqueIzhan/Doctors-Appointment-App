@@ -125,7 +125,7 @@ const Onboarding = () => {
                 healthcare journey
               </CardDescription>
             </CardContent>
-            <Button className="gradient w-full" disabled={loading}>
+            <Button className="gradient w-full cursor-pointer" disabled={loading}>
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -152,7 +152,7 @@ const Onboarding = () => {
                 provide consultataions
               </CardDescription>
             </CardContent>
-            <Button className="gradient w-full">Continue as Doctor</Button>
+            <Button className="gradient w-full cursor-pointer">Continue as Doctor</Button>
           </Card>
         </div>
       )}
@@ -254,14 +254,14 @@ const Onboarding = () => {
                   type="button"
                   variant="outline"
                   onClick={() => setStep("choose-role")}
-                  className="border-emerald-900/30"
+                  className="border-emerald-900/30 cursor-pointer"
                   disabled={loading}
                 >
                   Back
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-emerald-600 hover:bg-emerald-700"
+                  className="bg-emerald-600 hover:bg-emerald-700 cursor-pointer"
                   disabled={loading}
                 >
                   {loading ? (
