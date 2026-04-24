@@ -131,6 +131,6 @@ export const getAvailabilitySlots = async () => {
   }
 };
 
-export const getAllAppointments = async () => {
-  return [];
-};
+// export const getAllAppointments = async () => {
+//   return [];
+// };

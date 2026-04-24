@@ -40,7 +40,7 @@ const Header = async () => {
             className="h-10 w-auto object-contain"
           />
         </Link>
-        <div className="w-1/5 flex items-center justify-between">
+        <div className="flex items-center gap-8">
           <SignedIn>
             {user?.role === "UNASSIGNED" && (
               <Link href="/onboarding">

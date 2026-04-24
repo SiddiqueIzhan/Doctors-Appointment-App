@@ -98,3 +98,75 @@ export async function checkAndAllocateCredits(user: UserWithTransactions) {
     console.error(`failed to allocate credits: ${error}`);
   }
 }
+
+export async function deductCreditsFromPatients(
+  userId: string,
+  doctorId: string,
+) {
+  try {
+    const user = await db.user.findUnique({ where: { id: userId } });
+    const doctor = await db.user.findUnique({ where: { id: doctorId } });
+
+    if (!user) {
+      throw new Error("user is required");
+    }
+
+    if (user.credits < APPOINTMENT_CREDIT_COST) {
+      throw new Error("Insufficient Balance");
+    }
+
+    if (!doctor) {
+      throw new Error("Doctor Not found");
+    }
+
+    const result = await db.$transaction(async (tx) => {
+      // create transaction entry for user(patient)
+      await tx.creditTransaction.create({
+        data: {
+          userId: user.id,
+          amount: -APPOINTMENT_CREDIT_COST,
+          type: "APPOINTMENT_DEDUCTION",
+        },
+      });
+
+      //create transaction entry for doctor
+      await tx.creditTransaction.create({
+        data: {
+          userId: doctor.id,
+          amount: APPOINTMENT_CREDIT_COST,
+          type: "APPOINTMENT_DEDUCTION",
+        },
+      });
+
+      // get updated user details
+      const updatedUser = await tx.user.update({
+        where: { id: user.id },
+        data: {
+          credits: {
+            decrement: APPOINTMENT_CREDIT_COST,
+          },
+        },
+      });
+
+      //update doctor details
+      await tx.user.update({
+        where: { id: doctor.id },
+        data: {
+          credits: {
+            increment: APPOINTMENT_CREDIT_COST,
+          },
+        },
+      });
+
+      return updatedUser;
+    });
+
+    return { success: true, user: result };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { success: false, error: error.message };
+    } else {
+      return { success: false };
+    }
+  }
+}

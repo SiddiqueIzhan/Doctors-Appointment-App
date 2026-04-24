@@ -81,7 +81,7 @@ const PendingDoctors = ({ doctors }: PendingDoctorProps) => {
           review and approve doctor applications
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-x-2">
+      <CardContent className="space-y-2">
         {doctors.length === 0 ? (
           <p className="w-full font-medium text-muted-foreground text-center">
             No Pending Request Currently
