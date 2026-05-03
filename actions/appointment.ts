@@ -8,6 +8,7 @@ import { revalidatePath } from "next/cache";
 import { Vonage } from "@vonage/server-sdk";
 import { Auth } from "@vonage/auth";
 import { MediaMode } from "@vonage/video";
+import { Prisma } from "@/lib/generated/prisma/client";
 
 export type TimeSlot = {
   startTime: string;
@@ -21,6 +22,18 @@ export type resultType = {
   displayDate: string;
   slots: TimeSlot[];
 };
+
+export type appointmentsWithPatients = Prisma.AppointmentGetPayload<{
+  include: {
+    patient: true;
+  };
+}>;
+
+export type appointmentsWithDoctors = Prisma.AppointmentGetPayload<{
+  include: {
+    doctor: true;
+  };
+}>;
 
 export type AvailableSlotsPerDay = Record<string, TimeSlot[]>;
 
@@ -338,7 +351,7 @@ export async function getDoctorAppointments() {
       throw new Error("No Appointments found for this doctor");
     }
 
-    revalidatePath("/doctor");
+    // revalidatePath("/doctor");
     return { success: true, appointments };
   } catch (error) {
     console.log(error);
@@ -379,7 +392,7 @@ export async function cancelAppointment(formdata: FormData) {
       throw new Error("Appointment Not Found");
     }
 
-    if (user.id !== appointment.doctorId || user.id !== appointment.patientId) {
+    if (![appointment.doctorId, appointment.patientId].includes(user.id)) {
       throw new Error("User Not Authorized to cancel this Appointment");
     }
 
@@ -447,7 +460,7 @@ export async function cancelAppointment(formdata: FormData) {
   }
 }
 
-export async function addDoctorNotesForPatitent(formdata: FormData) {
+export async function addDoctorNotesForPatient(formdata: FormData) {
   const { userId } = await auth();
 
   if (!userId) {

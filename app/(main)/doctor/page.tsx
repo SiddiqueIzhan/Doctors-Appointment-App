@@ -54,9 +54,9 @@ const DoctorDashboard = async () => {
         </TabsList>
         <div className="col-span-3">
           <TabsContent value="appointments">
-            {/* <DoctorAppointmentsList
+            <DoctorAppointmentsList
               appointments={appointments?.appointments || []}
-            /> */}
+            />
           </TabsContent>
           <TabsContent value="slots">
             <Slots slots={slots.availableSlots} />

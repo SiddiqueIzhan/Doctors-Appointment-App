@@ -51,7 +51,10 @@ const Header = async () => {
                   <User className="h-4 w-4" />
                   Complete Profile
                 </Button>
-                <Button variant="ghost" className="md:hidden w-10 h-10 p-0 cursor-pointer">
+                <Button
+                  variant="ghost"
+                  className="md:hidden w-10 h-10 p-0 cursor-pointer"
+                >
                   <User className="h-4 w-4" />
                 </Button>
               </Link>
@@ -65,7 +68,10 @@ const Header = async () => {
                   <Stethoscope className="h-4 w-4" />
                   Doctor Dashboard
                 </Button>
-                <Button variant="ghost" className="md:hidden w-10 h-10 p-0 cursor-pointer">
+                <Button
+                  variant="ghost"
+                  className="md:hidden w-10 h-10 p-0 cursor-pointer"
+                >
                   <Stethoscope className="h-4 w-4" />
                 </Button>
               </Link>
@@ -79,7 +85,10 @@ const Header = async () => {
                   <Calendar className="h-4 w-4" />
                   My Appointments
                 </Button>
-                <Button variant="ghost" className="md:hidden w-10 h-10 p-0 cursor-pointer">
+                <Button
+                  variant="ghost"
+                  className="md:hidden w-10 h-10 p-0 cursor-pointer"
+                >
                   <Calendar className="h-4 w-4" />
                 </Button>
               </Link>
@@ -98,7 +107,7 @@ const Header = async () => {
                 </Button>
               </Link>
             )}
-            {(!user || user?.role === "PATIENT") && (
+            {(!user || ["PATIENT", "DOCTOR"].includes(user?.role)) && (
               <Link href="/pricing">
                 <Badge
                   variant="outline"
@@ -106,10 +115,14 @@ const Header = async () => {
                 >
                   <CreditCard className="h-3.5 w-3.5 text-emerald-400" />
                   <span className="text-emerald-400">
-                    {user && user?.role === "PATIENT" ? (
+                    {user && ["PATIENT", "DOCTOR"].includes(user?.role) ? (
                       <>
                         {user.credits}{" "}
-                        <span className="hidden md:inline">Credits</span>
+                        <span className="hidden md:inline">
+                          {user.role === "PATIENT"
+                            ? "Credits"
+                            : "Earned Credits"}
+                        </span>
                       </>
                     ) : (
                       <>Pricing</>
@@ -124,7 +137,9 @@ const Header = async () => {
 
           <SignedOut>
             <SignInButton>
-              <Button variant="secondary" className="cursor-pointer">Sign In</Button>
+              <Button variant="secondary" className="cursor-pointer">
+                Sign In
+              </Button>
             </SignInButton>
           </SignedOut>
           {/* Show the user button when the user is signed in */}
