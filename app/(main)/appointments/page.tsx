@@ -17,7 +17,7 @@ export default async function PatientAppointmentsPage() {
   const { appointments, error } = await getPatientAppointments();
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4">
       <PageHeader
         icon={Calendar}
         title="My Appointments"
@@ -38,7 +38,7 @@ export default async function PatientAppointmentsPage() {
               <p className="text-red-400">Error: {error}</p>
             </div>
           ) : appointments?.length > 0 ? (
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {appointments.map((appointment) => (
                 <AppointmentCard
                   key={appointment.id}

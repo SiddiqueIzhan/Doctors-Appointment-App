@@ -608,7 +608,7 @@ export async function generateVideoSessionToken(formdata: FormData) {
       throw new Error("Appointment Not Found");
     }
 
-    if (user.id !== appointment.patientId || user.id !== appointment.doctorId) {
+    if (![appointment.patientId, appointment.doctorId].includes(user.id)) {
       throw new Error("You are not authorized to join this call");
     }
 
