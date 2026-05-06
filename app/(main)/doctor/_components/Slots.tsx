@@ -91,7 +91,7 @@ const Slots = ({ slots }: SlotsPropsType) => {
 
   return (
     <>
-      <Card className="bg-muted/50 border-emerald-600/20 -mt-5">
+      <Card className="bg-muted/50 border-emerald-600/20">
         <CardHeader className="w-full">
           <CardTitle className="text-xl flex gap-2 items-center">
             <Clock className="w-5 h-5 text-emerald-400" />

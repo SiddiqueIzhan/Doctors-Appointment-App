@@ -38,6 +38,7 @@ model User{
   doctorAppointments Appointment[] @relation("DoctorAppointments")
   availabilities Availability[]
   transactions CreditTransaction[]  
+  payouts Payout[]
 }
 
 enum UserRole {
@@ -117,10 +118,26 @@ enum TransactionType {
   ADMIN_ADJUSTMENT // manual adjustment by admin
 }
 
+model Payout {
+  id              String        @id @default(uuid())
+  doctorId        String
+  doctor          User          @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  amount          Float         // Total payout amount in USD
+  credits         Int           // Number of credits being paid out
+  platformFee     Float         // Platform fee deducted (2 USD per credit)
+  netAmount       Float         // Amount doctor receives (8 USD per credit)
+  paypalEmail     String        // Doctor's PayPal email for payout
+  status          PayoutStatus  @default(PROCESSING)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  processedAt     DateTime?     // When admin marked it as processed
+  processedBy     String?       // Admin who processed it
 
+  @@index([status, createdAt])
+  @@index([doctorId, status])
+}
 
-
-
-
-
-
+enum PayoutStatus {
+  PROCESSING
+  PROCESSED
+}

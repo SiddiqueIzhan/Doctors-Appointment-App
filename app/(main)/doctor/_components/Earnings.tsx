@@ -1,0 +1,384 @@
+"use client";
+
+import { requestPayout } from "@/actions/payout";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useFetch } from "@/hooks/use-fetch";
+import { Payout } from "@/lib/generated/prisma";
+import { format } from "date-fns";
+import {
+  AlertCircle,
+  BarChart3,
+  Calendar,
+  Coins,
+  CreditCard,
+  Loader2,
+  TrendingUp,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+
+type earningsDataType = {
+  totalEarnings: number;
+  currentMonthEarnings: number;
+  completedAppointments: number;
+  averageEarningsPerMonth: number;
+  availableCredits: number;
+  availablePayout: number;
+};
+
+interface EarningsProps {
+  earningsData: earningsDataType | null;
+  payouts: Payout[];
+}
+
+const Earnings = ({ earningsData, payouts }: EarningsProps) => {
+  const [paypalEmail, setPaypalEmail] = useState("");
+  const [showPayoutDialog, setShowPayoutDialog] = useState(false);
+
+  const { data, loading, fn: submitPayoutRequest } = useFetch(requestPayout);
+
+  const {
+    totalEarnings,
+    currentMonthEarnings,
+    completedAppointments,
+    averageEarningsPerMonth,
+    availableCredits,
+    availablePayout,
+  } = earningsData as earningsDataType;
+
+  const pendingPayout = payouts.find((payout) => payout.status === "PROCESSED");
+  const platformFee = availableCredits * 2; // $2 per credit
+
+  const handleSubmitPayout = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+
+    if (!paypalEmail) {
+      toast.error("PayPal Mail is required");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("paypalEmail", paypalEmail);
+    await submitPayoutRequest(formData);
+  };
+
+  useEffect(() => {
+    if (data && data.success) {
+      setPaypalEmail("");
+      setShowPayoutDialog(false);
+      toast.success("Payout submitted Successfully");
+    }
+  }, [data]);
+
+  const earningsDataList = [
+    {
+      id: 1,
+      name: "Available Credits",
+      value: availableCredits,
+      desc: `$${availablePayout.toFixed()} available for payout`,
+      icon: <Coins className="w-4 h-4 text-emerald-400" />,
+    },
+    {
+      id: 2,
+      name: "This Month",
+      value: `$${currentMonthEarnings.toFixed(2)}`,
+      desc: "",
+      icon: <TrendingUp className="w-4 h-4 text-emerald-400" />,
+    },
+    {
+      id: 3,
+      name: "Total Appointments",
+      value: completedAppointments,
+      desc: "completed",
+      icon: <Calendar className="w-4 h-4 text-emerald-400" />,
+    },
+    {
+      id: 4,
+      name: "Avg/Month",
+      value: `$${averageEarningsPerMonth.toFixed(2)}`,
+      desc: "",
+      icon: <BarChart3 className="w-4 h-4 text-emerald-400" />,
+    },
+  ];
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 -mt-10">
+        {earningsDataList.map(({ id, name, value, desc, icon }) => {
+          return (
+            <Card className="border-emerald-900/20" key={id}>
+              <CardContent className="px-6 py-3">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">{name}</p>
+                    <p className="text-3xl font-bold text-white">{value}</p>
+                    <p className="text-xs text-muted-foreground">{desc}</p>
+                  </div>
+                  <div className="bg-emerald-900/20 p-3 rounded-full">
+                    {icon}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+      {/* Payout Section */}
+      <Card className="border-emerald-900/20">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-white flex items-center">
+            <CreditCard className="h-5 w-5 mr-2 text-emerald-400" />
+            Payout Management
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Current Payout Status */}
+          <div className="bg-muted/20 p-4 rounded-lg border border-emerald-900/20">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-lg font-medium text-white">
+                Available for Payout
+              </h3>
+              {pendingPayout ? (
+                <Badge
+                  variant="outline"
+                  className="bg-amber-900/20 border-amber-900/30 text-amber-400"
+                >
+                  PROCESSING
+                </Badge>
+              ) : (
+                <Badge
+                  variant="outline"
+                  className="bg-emerald-900/20 border-emerald-900/30 text-emerald-400"
+                >
+                  Available
+                </Badge>
+              )}
+            </div>
+            {pendingPayout ? (
+              <div className="space-y-2">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                  <div>
+                    <p className="text-muted-foreground">Pending Credits</p>
+                    <p className="text-white font-medium">
+                      {pendingPayout.credits}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">Pending Amount</p>
+                    <p className="text-white font-medium">
+                      ${pendingPayout.netAmount.toFixed(2)}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">PayPal Email</p>
+                    <p className="text-white font-medium text-xs">
+                      {pendingPayout.paypalEmail}
+                    </p>
+                  </div>
+                </div>
+                <Alert>
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription className="text-sm">
+                    Your payout request is being processed. You'll receive the
+                    payment once an admin approves it. Your credits will be
+                    deducted after processing.
+                  </AlertDescription>
+                </Alert>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                <div>
+                  <p className="text-muted-foreground">Available Credits</p>
+                  <p className="text-white font-medium">{availableCredits}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Payout Amount</p>
+                  <p className="text-white font-medium">
+                    ${availablePayout.toFixed(2)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Platform Fee</p>
+                  <p className="text-white font-medium">
+                    ${platformFee.toFixed(2)}
+                  </p>
+                </div>
+              </div>
+            )}
+            {!pendingPayout && availableCredits > 0 && (
+              <Button
+                onClick={() => setShowPayoutDialog(true)}
+                className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700"
+              >
+                Request Payout for All Credits
+              </Button>
+            )}
+
+            {availableCredits === 0 && !pendingPayout && (
+              <div className="text-center py-4">
+                <p className="text-muted-foreground">
+                  No credits available for payout. Complete more appointments to
+                  earn credits.
+                </p>
+              </div>
+            )}
+          </div>
+          {/* Payout Information */}
+          <Alert>
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription className="text-sm">
+              <strong>Payout Structure:</strong> You earn $8 per credit.
+              Platform fee is $2 per credit. Payouts include all your available
+              credits and are processed via PayPal.
+            </AlertDescription>
+          </Alert>
+          {payouts.length > 0 && (
+            <div className="space-y-2">
+              <h3 className="text-lg font-medium text-white">Payout History</h3>
+              <div className="space-y-2">
+                {payouts.slice(0, 5).map((payout) => (
+                  <div
+                    key={payout.id}
+                    className="flex items-center justify-between p-3 rounded-md bg-muted/10 border border-emerald-900/10"
+                  >
+                    <div>
+                      <p className="text-white font-medium">
+                        {format(new Date(payout.createdAt), "MMM d, yyyy")}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {payout.credits} credits • $
+                        {payout.netAmount.toFixed(2)}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {payout.paypalEmail}
+                      </p>
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className={
+                        payout.status === "PROCESSED"
+                          ? "bg-emerald-900/20 border-emerald-900/30 text-emerald-400"
+                          : "bg-amber-900/20 border-amber-900/30 text-amber-400"
+                      }
+                    >
+                      {payout.status}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+      {/* Payout Request Dialog */}
+      <Dialog open={showPayoutDialog} onOpenChange={setShowPayoutDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-white">
+              Request Payout
+            </DialogTitle>
+            <DialogDescription>
+              Request payout for all your available credits
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={handleSubmitPayout} className="space-y-4">
+            <div className="bg-muted/20 p-4 rounded-lg space-y-2">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">
+                  Available credits:
+                </span>
+                <span className="text-white">{availableCredits}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Gross amount:</span>
+                <span className="text-white">
+                  ${(availableCredits * 10).toFixed(2)}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">
+                  Platform fee (20%):
+                </span>
+                <span className="text-white">-${platformFee.toFixed(2)}</span>
+              </div>
+              <div className="border-t border-emerald-900/20 pt-2 flex justify-between font-medium">
+                <span className="text-white">Net payout:</span>
+                <span className="text-emerald-400">
+                  ${availablePayout.toFixed(2)}
+                </span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="paypalEmail">PayPal Email</Label>
+              <Input
+                id="paypalEmail"
+                type="email"
+                placeholder="your-email@paypal.com"
+                value={paypalEmail}
+                onChange={(e) => setPaypalEmail(e.target.value)}
+                className="bg-background border-emerald-900/20"
+                required
+              />
+              <p className="text-sm text-muted-foreground">
+                Enter the PayPal email where you want to receive the payout.
+              </p>
+            </div>
+
+            <Alert>
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription className="text-sm">
+                Once processed by admin, {availableCredits} credits will be
+                deducted from your account and ${availablePayout.toFixed(2)}{" "}
+                will be sent to your PayPal.
+              </AlertDescription>
+            </Alert>
+
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowPayoutDialog(false)}
+                disabled={loading}
+                className="border-emerald-900/30"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={loading}
+                className="bg-emerald-600 hover:bg-emerald-700"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Requesting...
+                  </>
+                ) : (
+                  "Request Payout"
+                )}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+export default Earnings;
