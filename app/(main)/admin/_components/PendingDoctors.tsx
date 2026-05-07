@@ -74,7 +74,7 @@ const PendingDoctors = ({ doctors }: PendingDoctorProps) => {
   }, [data]);
 
   return (
-    <Card className="-mt-5">
+    <Card>
       <CardHeader>
         <CardTitle className="text-lg">Pending Doctor Verifications</CardTitle>
         <CardDescription className="text-muted-foreground">

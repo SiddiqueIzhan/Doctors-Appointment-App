@@ -28,9 +28,9 @@ export async function requestPayout(formData: FormData) {
       throw new Error("Doctor not found");
     }
 
-    const payoutEmail = formData.get("payoutemail")?.toString();
+    const paypalEmail = formData.get("paypalEmail")?.toString();
 
-    if (!payoutEmail) {
+    if (!paypalEmail) {
       throw new Error("Payout Email Not Found");
     }
 
@@ -66,7 +66,7 @@ export async function requestPayout(formData: FormData) {
         credits,
         netAmount,
         platformFee,
-        paypalEmail: payoutEmail,
+        paypalEmail,
       },
     });
 

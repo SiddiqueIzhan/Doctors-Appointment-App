@@ -1,6 +1,7 @@
 "use server";
 
 import { VerificationStatus } from "@/lib/generated/prisma";
+import { Prisma } from "@/lib/generated/prisma";
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
@@ -11,6 +12,20 @@ import { revalidatePath } from "next/cache";
 // 3. Get Verified Doctors
 // 4. Update doctor status
 // 5. Suspend Doctor
+
+export type PayoutWithUser = Prisma.PayoutGetPayload<{
+  include: {
+    doctor: {
+      select: {
+        id: true;
+        name: true;
+        email: true;
+        credits: true;
+        speciality: true;
+      };
+    };
+  };
+}>;
 
 export const verifyAdmin = async () => {
   const { userId } = await auth();
@@ -172,3 +187,122 @@ export const suspendDoctor = async (formdata: FormData) => {
     );
   }
 };
+
+export async function getAllPendingPayouts() {
+  const isAdmin = await verifyAdmin();
+
+  if (!isAdmin) throw new Error("Unauthorized");
+
+  try {
+    const { userId } = await auth();
+
+    const pendingPayouts = await db.payout.findMany({
+      where: {
+        status: "PROCESSING",
+      },
+      include: {
+        doctor: {
+          select: {
+            id: true,
+            name: true,
+            speciality: true,
+            email: true,
+            credits: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    if (!pendingPayouts) {
+      return { payouts: [] };
+    }
+
+    return { payouts: pendingPayouts };
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function approvePayout(formData: FormData) {
+  const isAdmin = await verifyAdmin();
+
+  if (!isAdmin) throw new Error("Unauthorized");
+
+  const payoutId = formData.get("payoutId")?.toString();
+
+  if (!payoutId) {
+    throw new Error("Payout Id is required");
+  }
+
+  try {
+    const { userId } = await auth();
+
+    if (!userId) {
+      throw new Error("Unauthorized");
+    }
+
+    const admin = await db.user.findUnique({
+      where: {
+        clerkUserId: userId,
+      },
+    });
+
+    const payoutToBeProcessed = await db.payout.findUnique({
+      where: {
+        id: payoutId,
+        status: "PROCESSING",
+      },
+      include: {
+        doctor: true,
+      },
+    });
+
+    if (!payoutToBeProcessed) {
+      throw new Error("Payout not found or is already processed");
+    }
+
+    if (payoutToBeProcessed.doctor.credits < payoutToBeProcessed.credits) {
+      throw new Error("Insufficient Credits present required to be processed");
+    }
+
+    await db.$transaction(async (tx) => {
+      await tx.payout.update({
+        where: {
+          id: payoutId,
+        },
+        data: {
+          status: "PROCESSED",
+          processedAt: new Date(),
+          processedBy: admin?.id,
+        },
+      });
+
+      await tx.user.update({
+        where: {
+          id: payoutToBeProcessed.doctorId,
+        },
+        data: {
+          credits: {
+            decrement: payoutToBeProcessed.credits,
+          },
+        },
+      });
+
+      await tx.creditTransaction.create({
+        data: {
+          userId: payoutToBeProcessed.doctorId,
+          amount: -payoutToBeProcessed.credits,
+          type: "ADMIN_ADJUSTMENT",
+        },
+      });
+    });
+
+    revalidatePath("/admin");
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+  }
+}

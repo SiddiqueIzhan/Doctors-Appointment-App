@@ -26,16 +26,14 @@ const AdminLayout = async ({ children }: LayoutProps) => {
 
       <Tabs
         defaultValue="pending"
-        className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-16"
+        className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8"
       >
-        <TabsList
-          className="md:col-span-1 flex flex-row md:flex-col w-full p-2 rounded-md gap-2 bg-transparent"
-        >
+        <TabsList className="md:col-span-1 flex flex-row md:flex-col w-full p-2 rounded-md gap-2 bg-transparent justify-start -mt-2.5">
           <TabsTrigger
             value="pending"
             className="w-full px-4 py-4 hover:bg-muted/40 cursor-pointer"
           >
-            <AlertCircle className="w-4 h-4"/>
+            <AlertCircle className="w-4 h-4" />
             Pending Verifications
           </TabsTrigger>
 
@@ -45,6 +43,14 @@ const AdminLayout = async ({ children }: LayoutProps) => {
           >
             <Users className="w-4 h-4" />
             Doctors
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="payouts"
+            className="w-full px-4 py-4 hover:bg-muted/40 cursor-pointer"
+          >
+            <Users className="w-4 h-4" />
+            Pending Payouts
           </TabsTrigger>
         </TabsList>
 

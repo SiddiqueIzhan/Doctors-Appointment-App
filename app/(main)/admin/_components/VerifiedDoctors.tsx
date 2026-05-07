@@ -25,11 +25,7 @@ const VerifiedDoctors = ({ doctors }: verifiedDoctorProps) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [targetDoctor, setTargetDoctor] = useState<UserType | null>(null);
 
-  const {
-    data,
-    loading,
-    fn: submitStatusUpdate,
-  } = useFetch(suspendDoctor);
+  const { data, loading, fn: submitStatusUpdate } = useFetch(suspendDoctor);
 
   const filteredDoctors = () =>
     doctors.filter((doc) => {
@@ -42,30 +38,32 @@ const VerifiedDoctors = ({ doctors }: verifiedDoctorProps) => {
     });
 
   const handleSuspend = async (doctor: UserType) => {
-    const confirmed = window.confirm(`Are you sure you want to suspend ${doctor.name} `)
+    const confirmed = window.confirm(
+      `Are you sure you want to suspend ${doctor.name} `,
+    );
     if (!confirmed || loading) return;
 
     const formData = new FormData();
     formData.append("doctorId", doctor.id);
     formData.append("suspend", "true");
 
-    setTargetDoctor(doctor)
+    setTargetDoctor(doctor);
     await submitStatusUpdate(formData);
   };
 
   useEffect(() => {
-    if(data && data?.success && targetDoctor){
+    if (data && data?.success && targetDoctor) {
       toast.success(`${targetDoctor.name} suspended successfully`);
       setTargetDoctor(null);
     }
-  }, [data])
+  }, [data]);
 
   useEffect(() => {
     filteredDoctors();
   }, [searchTerm]);
 
   return (
-    <Card className="bg-muted/50 border-emerald-600/20 -mt-5">
+    <Card className="bg-muted/50 border-emerald-600/20">
       <CardHeader className="w-full flex justify-between">
         <div>
           <CardTitle className="text-lg">Manage Doctors</CardTitle>

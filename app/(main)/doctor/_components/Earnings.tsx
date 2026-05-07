@@ -59,7 +59,9 @@ const Earnings = ({ earningsData, payouts }: EarningsProps) => {
     availablePayout,
   } = earningsData as earningsDataType;
 
-  const pendingPayout = payouts.find((payout) => payout.status === "PROCESSED");
+  const pendingPayout = payouts.find(
+    (payout) => payout.status === "PROCESSING",
+  );
   const platformFee = availableCredits * 2; // $2 per credit
 
   const handleSubmitPayout = async (
@@ -147,7 +149,7 @@ const Earnings = ({ earningsData, payouts }: EarningsProps) => {
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Current Payout Status */}
-          <div className="bg-muted/20 p-4 rounded-lg border border-emerald-900/20">
+          <div className="bg-black p-4 rounded-lg border border-emerald-900/20">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-lg font-medium text-white">
                 Available for Payout
@@ -238,14 +240,17 @@ const Earnings = ({ earningsData, payouts }: EarningsProps) => {
             )}
           </div>
           {/* Payout Information */}
-          <Alert>
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription className="text-sm">
-              <strong>Payout Structure:</strong> You earn $8 per credit.
-              Platform fee is $2 per credit. Payouts include all your available
-              credits and are processed via PayPal.
-            </AlertDescription>
-          </Alert>
+          <div className="w-full h-fit bg-black rounded-lg">
+            <Alert className="bg-transparent">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription className="text-sm">
+                <strong>Payout Structure:</strong> You earn $8 per credit.
+                Platform fee is $2 per credit. Payouts include all your
+                available credits and are processed via PayPal.
+              </AlertDescription>
+            </Alert>
+          </div>
+
           {payouts.length > 0 && (
             <div className="space-y-2">
               <h3 className="text-lg font-medium text-white">Payout History</h3>
@@ -253,7 +258,7 @@ const Earnings = ({ earningsData, payouts }: EarningsProps) => {
                 {payouts.slice(0, 5).map((payout) => (
                   <div
                     key={payout.id}
-                    className="flex items-center justify-between p-3 rounded-md bg-muted/10 border border-emerald-900/10"
+                    className="flex items-center justify-between p-3 rounded-md bg-black border border-emerald-900/10"
                   >
                     <div>
                       <p className="text-white font-medium">
