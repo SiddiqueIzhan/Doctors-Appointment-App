@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/actions/onboarding";
 import { PageHeader } from "@/components/ui/page-header";
 import AppointmentCard from "@/components/AppointmentCard";
-import { appointmentsWithDoctors } from "@/actions/appointment";
+import { appointmentsWithDoctors } from "@/utils/types";
 
 export default async function PatientAppointmentsPage() {
   const user = await getCurrentUser();
