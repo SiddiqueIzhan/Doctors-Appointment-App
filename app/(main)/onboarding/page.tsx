@@ -15,7 +15,6 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod/v3";
-import { userRoleRespType } from "../../../actions/onboarding";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
@@ -27,14 +26,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { SpecialitiesType, SPECIALTIES } from "@/lib/speciality";
-
-type DoctorFormType = {
-  speciality: string;
-  experience: number;
-  credentialURL: string;
-  description: string;
-};
+import { SPECIALTIES } from "@/lib/speciality";
+import { DoctorFormType } from "@/utils/types";
 
 const doctorFormSchema = z.object({
   speciality: z.string(),

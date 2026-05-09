@@ -1,3 +1,4 @@
+import { LayoutRoutes } from "@/.next/dev/types/routes";
 import { PageHeader } from "@/components/ui/page-header";
 import { Stethoscope } from "lucide-react";
 
@@ -6,13 +7,7 @@ export const metadata = {
   description: "Manage your appointments and availability",
 };
 
-interface DoctorDashboardLayoutProps {
-  children: React.ReactNode;
-}
-
-export default async function DoctorDashboardLayout({
-  children,
-}: DoctorDashboardLayoutProps) {
+export default async function DoctorDashboardLayout({ children }: LayoutProps<LayoutRoutes>) {
   return (
     <div className="container mx-auto px-4">
       <PageHeader icon={Stethoscope} title="Doctor Dashboard" />

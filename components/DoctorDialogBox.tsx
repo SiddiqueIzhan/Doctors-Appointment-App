@@ -1,7 +1,5 @@
 import {
   addDoctorNotesForPatient,
-  appointmentsWithDoctors,
-  appointmentsWithPatients,
   cancelAppointment,
   generateVideoSessionToken,
   markAsCompleted,
@@ -27,20 +25,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog";
-import { AppointmentCardPropsType } from "./AppointmentCard";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { formatDateTime, formatTime } from "@/utils/helper";
 import { Textarea } from "./ui/textarea";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
-interface DoctorDialogBoxType extends AppointmentCardPropsType {
-  open: boolean;
-  setOpen: (value: SetStateAction<boolean>) => void;
-}
-
-type ActionType = "video" | "cancel" | "notes" | "completed";
+import { ActionType, appointmentsWithDoctors, appointmentsWithPatients, DoctorDialogBoxType } from "@/utils/types";
 
 const AppointmentDetailsDialog = ({
   appointment,

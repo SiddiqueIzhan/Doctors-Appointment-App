@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFetch } from "@/hooks/use-fetch";
-import { Payout } from "@/lib/generated/prisma";
+import { earningsDataType, EarningsProps } from "@/utils/types";
 import { format } from "date-fns";
 import {
   AlertCircle,
@@ -29,20 +29,6 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-
-type earningsDataType = {
-  totalEarnings: number;
-  currentMonthEarnings: number;
-  completedAppointments: number;
-  averageEarningsPerMonth: number;
-  availableCredits: number;
-  availablePayout: number;
-};
-
-interface EarningsProps {
-  earningsData: earningsDataType | null;
-  payouts: Payout[];
-}
 
 const Earnings = ({ earningsData, payouts }: EarningsProps) => {
   const [paypalEmail, setPaypalEmail] = useState("");

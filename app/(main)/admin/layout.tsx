@@ -1,3 +1,4 @@
+import { LayoutRoutes } from "@/.next/dev/types/routes";
 import { verifyAdmin } from "@/actions/admin";
 import { PageHeader } from "@/components/ui/page-header";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -5,16 +6,12 @@ import { AlertCircle, ShieldCheck, User, Users } from "lucide-react";
 import { redirect } from "next/navigation";
 import React from "react";
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
 export const metadata = {
   title: "Admin Settings - MediMeet",
   description: "Manage doctors, patients, and platform settings",
 };
 
-const AdminLayout = async ({ children }: LayoutProps) => {
+const AdminLayout = async ({ children }: LayoutProps<LayoutRoutes>) => {
   const isAdmin = await verifyAdmin();
   if (!isAdmin) {
     redirect("/onboarding");

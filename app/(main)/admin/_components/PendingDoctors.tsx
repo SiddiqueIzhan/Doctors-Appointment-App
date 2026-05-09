@@ -22,6 +22,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useFetch } from "@/hooks/use-fetch";
 import { User as UserType } from "@/lib/generated/prisma";
+import { DoctorProps } from "@/utils/types";
 import { strict } from "assert";
 import { format } from "date-fns";
 import {
@@ -39,11 +40,7 @@ import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
 import { toast } from "sonner";
 
-interface PendingDoctorProps {
-  doctors: UserType[];
-}
-
-const PendingDoctors = ({ doctors }: PendingDoctorProps) => {
+const PendingDoctors = ({ doctors }: DoctorProps) => {
   const [selectedDoctor, setSelectedDoctor] = useState<UserType | null>(null);
 
   const {
@@ -69,7 +66,7 @@ const PendingDoctors = ({ doctors }: PendingDoctorProps) => {
   useEffect(() => {
     if (data && data.success) {
       handleClose();
-      toast.success("Doctor Status is Successfully Updated")
+      toast.success("Doctor Status is Successfully Updated");
     }
   }, [data]);
 
@@ -88,13 +85,7 @@ const PendingDoctors = ({ doctors }: PendingDoctorProps) => {
           </p>
         ) : (
           doctors.map((doc: UserType) => {
-            const {
-              id,
-              name,
-              experience,
-              speciality,
-              imageUrl,
-            } = doc;
+            const { id, name, experience, speciality, imageUrl } = doc;
             return (
               <div
                 className="w-full rounded-md bg-black border border-emerald-700/20 flex justify-between items-center p-4"

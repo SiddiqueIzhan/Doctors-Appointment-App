@@ -8,34 +8,7 @@ import { revalidatePath } from "next/cache";
 import { Vonage } from "@vonage/server-sdk";
 import { Auth } from "@vonage/auth";
 import { MediaMode } from "@vonage/video";
-import { Prisma } from "@/lib/generated/prisma/client";
-
-export type TimeSlot = {
-  startTime: string;
-  endTime: string;
-  formatted: string;
-  day: string;
-};
-
-export type resultType = {
-  date: string;
-  displayDate: string;
-  slots: TimeSlot[];
-};
-
-export type appointmentsWithPatients = Prisma.AppointmentGetPayload<{
-  include: {
-    patient: true;
-  };
-}>;
-
-export type appointmentsWithDoctors = Prisma.AppointmentGetPayload<{
-  include: {
-    doctor: true;
-  };
-}>;
-
-export type AvailableSlotsPerDay = Record<string, TimeSlot[]>;
+import { AvailableSlotsPerDay } from "@/utils/types";
 
 // Initialize Vonage Video API client
 const credentials = new Auth({

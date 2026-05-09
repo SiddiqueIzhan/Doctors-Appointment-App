@@ -1,6 +1,6 @@
 "use client";
 
-import { approvePayout, PayoutWithUser } from "@/actions/admin";
+import { approvePayout } from "@/actions/admin";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useFetch } from "@/hooks/use-fetch";
-import { Payout } from "@/lib/generated/prisma";
+import { PayoutWithUser, PendingPayoutsProps } from "@/utils/types";
 import { format } from "date-fns";
 import {
   AlertCircle,
@@ -35,11 +35,7 @@ import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
 import { toast } from "sonner";
 
-interface PendingPayouts {
-  payouts: PayoutWithUser[];
-}
-
-const PendingPayouts = ({ payouts }: PendingPayouts) => {
+const PendingPayouts = ({ payouts }: PendingPayoutsProps) => {
   const [selectedPayout, setSelectedPayout] = useState<PayoutWithUser | null>(
     null,
   );

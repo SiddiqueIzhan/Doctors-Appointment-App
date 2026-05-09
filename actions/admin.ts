@@ -1,7 +1,6 @@
 "use server";
 
 import { VerificationStatus } from "@/lib/generated/prisma";
-import { Prisma } from "@/lib/generated/prisma";
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
@@ -13,21 +12,7 @@ import { revalidatePath } from "next/cache";
 // 4. Update doctor status
 // 5. Suspend Doctor
 
-export type PayoutWithUser = Prisma.PayoutGetPayload<{
-  include: {
-    doctor: {
-      select: {
-        id: true;
-        name: true;
-        email: true;
-        credits: true;
-        speciality: true;
-      };
-    };
-  };
-}>;
-
-export const verifyAdmin = async () => {
+export const verifyAdmin = async (): Promise<boolean> => {
   const { userId } = await auth();
 
   if (!userId) return false;

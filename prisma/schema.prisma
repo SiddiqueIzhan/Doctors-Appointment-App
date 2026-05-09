@@ -110,6 +110,8 @@ model CreditTransaction {
   amount Int
   packageID String? // reference to which package was purchased
   createdAt DateTime @default(now())
+
+   @@unique([userId, packageID, createdAt])
 }
 
 enum TransactionType {

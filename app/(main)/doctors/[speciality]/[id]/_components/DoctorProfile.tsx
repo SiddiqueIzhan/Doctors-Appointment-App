@@ -1,10 +1,5 @@
 "use client";
 
-import {
-  AvailableSlotsPerDay,
-  resultType,
-  TimeSlot,
-} from "@/actions/appointment";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { User as UserType } from "@/lib/generated/prisma";
 import {
   AlertCircle,
   Calendar,
@@ -32,13 +26,9 @@ import React, { useState } from "react";
 import AppointmentForm from "./AppointmentForm";
 import SlotPicker from "./SlotPicker";
 import { useRouter } from "next/navigation";
+import { DoctorProfileProps, TimeSlot } from "@/utils/types";
 
-interface DoctorProfilePropType {
-  doctor: UserType;
-  availableDays: resultType[];
-}
-
-const DoctorProfile = ({ doctor, availableDays }: DoctorProfilePropType) => {
+const DoctorProfile = ({ doctor, availableDays }: DoctorProfileProps) => {
   const [showSlots, setShowSlots] = useState<Boolean>(false);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
   const totalSlots = availableDays.reduce(

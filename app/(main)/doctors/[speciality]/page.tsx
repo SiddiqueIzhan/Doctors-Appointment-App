@@ -1,20 +1,9 @@
 import { getDoctorsBySpeciality } from "@/actions/doctor-listing";
 import { DoctorCard } from "@/components/DoctorCard";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { PageHeader } from "@/components/ui/page-header";
-import { Calendar, User } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+import { SpecialityPageProps } from "@/utils/types";
 
-interface SpecialityPagePropType {
-  params: Promise<{
-    speciality: string;
-  }>;
-}
-
-const SpecialityPage = async ({ params }: SpecialityPagePropType) => {
+const SpecialityPage = async ({ params }: SpecialityPageProps) => {
   const { speciality } = await params;
   const specialityModified = speciality.replaceAll("%20", " ");
   const { doctors, error } = await getDoctorsBySpeciality(specialityModified);

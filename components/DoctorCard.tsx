@@ -3,13 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { User as UserType } from "@/lib/generated/prisma";
+import { DoctorCardProps } from "@/utils/types";
 
-interface DoctorCardPropsType {
-  doctor: UserType;
-}
-
-export function DoctorCard({ doctor }: DoctorCardPropsType) {
+export function DoctorCard({ doctor }: DoctorCardProps) {
   return (
     <Card className="border-emerald-900/20 hover:border-emerald-700/40 transition-all">
       <CardContent>

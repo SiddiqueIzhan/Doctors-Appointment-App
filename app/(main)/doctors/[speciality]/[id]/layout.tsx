@@ -1,14 +1,7 @@
 import { getDoctorById } from "@/actions/appointment";
 import { PageHeader } from "@/components/ui/page-header";
+import { DoctorIDType } from "@/utils/types";
 import { redirect } from "next/navigation";
-import React from "react";
-
-export interface DoctorIDType {
-  params: Promise<{
-    id: string;
-  }>;
-  children?: React.ReactNode;
-}
 
 export async function generateMetadata({ params }: DoctorIDType) {
   const { id } = await params;
@@ -25,7 +18,7 @@ const DoctorProfileLayout = async ({ children, params }: DoctorIDType) => {
   const { doctor } = await getDoctorById(id);
 
   if (!doctor) redirect("/doctors");
-  
+
   return (
     <div className="container mx-auto">
       <PageHeader

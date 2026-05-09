@@ -1,8 +1,8 @@
 import { getAvailableTimeSlots, getDoctorById } from "@/actions/appointment";
-import { DoctorIDType } from "./layout";
 import { redirect } from "next/navigation";
 import DoctorProfile from "./_components/DoctorProfile";
 import { User } from "@/lib/generated/prisma";
+import { DoctorIDType } from "@/utils/types";
 
 const DoctorProfilePage = async ({ params }: DoctorIDType) => {
   const { id } = await params;

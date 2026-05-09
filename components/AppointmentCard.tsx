@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  appointmentsWithDoctors,
-  appointmentsWithPatients,
   markAsCompleted,
 } from "@/actions/appointment";
 import {
@@ -21,16 +19,12 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { formatDateTime, formatTime } from "@/utils/helper";
 import AppointmentDetailsDialog from "./DoctorDialogBox";
-
-export interface AppointmentCardPropsType {
-  appointment: appointmentsWithPatients | appointmentsWithDoctors;
-  userRole: "DOCTOR" | "PATIENT";
-}
+import { AppointmentCardProps, appointmentsWithDoctors, appointmentsWithPatients } from "@/utils/types";
 
 const AppointmentCard = ({
   appointment,
   userRole,
-}: AppointmentCardPropsType) => {
+}: AppointmentCardProps) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const {

@@ -1,20 +1,11 @@
-import {
-  appointmentsWithDoctors,
-  appointmentsWithPatients,
-} from "@/actions/appointment";
 import AppointmentCard from "@/components/AppointmentCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Appointment } from "@/lib/generated/prisma";
+import { DoctorAppointmentsProps } from "@/utils/types";
 import { Calendar } from "lucide-react";
-import React from "react";
-
-interface DoctorAppointmentsPropType {
-  appointments: appointmentsWithPatients[];
-}
 
 const DoctorAppointmentsList = ({
   appointments,
-}: DoctorAppointmentsPropType) => {
+}: DoctorAppointmentsProps) => {
   return (
     <div>
       <Card>

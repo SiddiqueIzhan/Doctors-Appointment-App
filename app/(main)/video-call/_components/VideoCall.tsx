@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { VideoCallProps } from "../page";
+import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -16,12 +15,7 @@ import {
   Video,
   VideoOff,
 } from "lucide-react";
-// import { Session } from "@clerk/nextjs/server";
-// import { OT } from "opentok";
-
-// interface Window {
-//   OT: OT;
-// }
+import { VideoCallProps } from "@/utils/types";
 
 const VideoCall = ({ sessionId, token }: VideoCallProps) => {
   const [isloading, setIsLoading] = useState(true);

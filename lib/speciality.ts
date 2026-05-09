@@ -14,13 +14,7 @@ import {
   Activity,
   CircleDot,
 } from "lucide-react";
-import { ReactElement, ReactNode } from "react";
-import { LucideIcon } from "lucide-react";
-
-export type SpecialitiesType = {
-    name: string;
-    icon: LucideIcon;
-}
+import { SpecialitiesType } from "@/utils/types";
 
 export const SPECIALTIES: SpecialitiesType[] = [
   {

@@ -12,16 +12,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { useFetch } from "@/hooks/use-fetch";
 import { User as UserType } from "@/lib/generated/prisma";
+import { DoctorProps } from "@/utils/types";
 import { Ban, Loader2, Search, User } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-interface verifiedDoctorProps {
-  doctors: UserType[];
-}
-
-const VerifiedDoctors = ({ doctors }: verifiedDoctorProps) => {
+const VerifiedDoctors = ({ doctors }: DoctorProps) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [targetDoctor, setTargetDoctor] = useState<UserType | null>(null);
 

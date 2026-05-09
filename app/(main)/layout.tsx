@@ -1,10 +1,7 @@
+import { LayoutRoutes } from "@/.next/dev/types/routes";
 import React from "react";
 
-interface MainLayoutProps {
-  children: React.ReactNode;
-}
-
-const MainLayout = ({ children }: MainLayoutProps) => {
+const MainLayout = ({ children }: LayoutProps<LayoutRoutes>) => {
   return <div className="container mx-auto my-28 px-20">{children}</div>;
 };
 

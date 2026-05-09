@@ -1,7 +1,7 @@
 "use server";
 
-import { Prisma, User } from "@/lib/generated/prisma/client";
 import { db } from "@/lib/prisma";
+import { UserWithTransactions } from "@/utils/types";
 import { auth } from "@clerk/nextjs/server";
 import { format } from "date-fns";
 import { revalidatePath } from "next/cache";
@@ -14,12 +14,6 @@ const PLAN_CREDITS = {
 };
 
 const APPOINTMENT_CREDIT_COST = 2;
-
-export type UserWithTransactions = Prisma.UserGetPayload<{
-  include: {
-    transactions: true;
-  };
-}>;
 
 export async function checkAndAllocateCredits(user: UserWithTransactions) {
   try {

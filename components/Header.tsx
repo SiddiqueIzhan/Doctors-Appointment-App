@@ -19,8 +19,8 @@ import {
 import { Badge } from "./ui/badge";
 import {
   checkAndAllocateCredits,
-  UserWithTransactions,
 } from "@/actions/credits";
+import { UserWithTransactions } from "@/utils/types";
 
 const Header = async () => {
   const user: UserWithTransactions | null = await checkUser();

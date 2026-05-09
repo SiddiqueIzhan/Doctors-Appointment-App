@@ -12,23 +12,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFetch } from "@/hooks/use-fetch";
-import { Availability } from "@/lib/generated/prisma";
+import { SlotsProps, timeDataType } from "@/utils/types";
 import { format } from "date-fns";
 import { AlertCircle, Calendar, Clock, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-type timeDataType = {
-  startTime: string;
-  endTime: string;
-};
-
-interface SlotsPropsType {
-  slots: Availability[];
-}
-
-const Slots = ({ slots }: SlotsPropsType) => {
+const Slots = ({ slots }: SlotsProps) => {
   const [showForm, setShowFrom] = useState<Boolean>(false);
   const { data, loading, fn: submitTimeSlot } = useFetch(setAvailabilitySlots);
 

@@ -1,3 +1,4 @@
+import { Feature } from "@/utils/types";
 import {
   Calendar,
   Video,
@@ -6,12 +7,6 @@ import {
   FileText,
   ShieldCheck,
 } from "lucide-react";
-
-type Feature = {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-};
 
 // JSON data for features
 export const features: Feature[] = [

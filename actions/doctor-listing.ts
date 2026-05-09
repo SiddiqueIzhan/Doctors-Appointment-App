@@ -1,10 +1,5 @@
-import { User } from "@/lib/generated/prisma";
 import { db } from "@/lib/prisma";
-
-type DocRespType = {
-  doctors?: User[];
-  error?: string;
-};
+import { DocRespType } from "@/utils/types";
 
 export async function getDoctorsBySpeciality(
   speciality: string,

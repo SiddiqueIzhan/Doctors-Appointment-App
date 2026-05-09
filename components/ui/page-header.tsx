@@ -1,14 +1,7 @@
 import Link from "next/link";
-import { ArrowLeft, LucideIcon } from "lucide-react";
-import React from "react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "./button";
-
-interface PageHeaderProps {
-  icon?: LucideIcon;
-  title: string;
-  backLink?: string;
-  backLabel?: string;
-}
+import { PageHeaderProps } from "@/utils/types";
 
 export function PageHeader({
   icon: Icon,

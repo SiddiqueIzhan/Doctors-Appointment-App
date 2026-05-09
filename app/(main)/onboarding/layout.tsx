@@ -1,20 +1,17 @@
+import { LayoutRoutes } from "@/.next/dev/types/routes";
 import { getCurrentUser } from "@/actions/onboarding";
 import { redirect } from "next/navigation";
-import React from "react";
-
-interface LayoutProps {
-  children: React.ReactNode;
-}
 
 export const metadata = {
-    title: "Onboarding - Medimeet",
-    description: "Complete your profile to get started with MediMeet"
-}
+  title: "Onboarding - Medimeet",
+  description: "Complete your profile to get started with MediMeet",
+};
 
-const OnboardingLayout = async ({ children }: LayoutProps) => {
+const OnboardingLayout = async ({ children }: LayoutProps<LayoutRoutes>) => {
   const user = await getCurrentUser();
 
-  if (user) { // onboarding page is only required for "UNASSIGNED" users
+  if (user) {
+    // onboarding page is only required for "UNASSIGNED" users
     if (user?.role === "PATIENT") redirect("/doctors");
     else if (user?.role === "DOCTOR") {
       if (user?.verificationStatus === "VERIFIED") redirect("/doctor");

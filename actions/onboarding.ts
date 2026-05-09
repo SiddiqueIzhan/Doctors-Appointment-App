@@ -9,13 +9,9 @@
 "use server";
 
 import { db } from "@/lib/prisma";
+import { userRoleRespType } from "@/utils/types";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-
-export type userRoleRespType = {
-  success: boolean;
-  redirect: string;
-};
 
 export async function setUserRole(
   formData: FormData,

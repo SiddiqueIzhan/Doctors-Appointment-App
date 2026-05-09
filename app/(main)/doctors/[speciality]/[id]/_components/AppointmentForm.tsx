@@ -1,26 +1,20 @@
-import { bookAppointment, TimeSlot } from "@/actions/appointment";
+import { bookAppointment } from "@/actions/appointment";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useFetch } from "@/hooks/use-fetch";
+import { AppointmentFormProps } from "@/utils/types";
 import { ArrowLeft, Calendar, Clock, CreditCard, Loader2 } from "lucide-react";
 import { redirect } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-
-interface AppointmentFormPropsType {
-  doctorId: string;
-  slot: TimeSlot;
-  onBack: () => void;
-  onComplete: () => void;
-}
 
 const AppointmentForm = ({
   doctorId,
   slot,
   onBack,
   onComplete,
-}: AppointmentFormPropsType) => {
+}: AppointmentFormProps) => {
   const [description, setDescription] = useState("");
 
   const { data, loading, fn: submitBooking } = useFetch(bookAppointment);
@@ -40,7 +34,7 @@ const AppointmentForm = ({
   useEffect(() => {
     if (data && data.success) {
       toast.success("Appointment Booked Successfully");
-      redirect("/appointments")
+      redirect("/appointments");
     }
   }, [data]);
 

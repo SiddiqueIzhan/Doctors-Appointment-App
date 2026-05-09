@@ -1,19 +1,14 @@
-import { resultType, TimeSlot } from "@/actions/appointment";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SlotBookingSectionProps, TimeSlot } from "@/utils/types";
 import { format } from "date-fns";
 import { ChevronRight, Clock } from "lucide-react";
-import React, { useState } from "react";
-
-interface SlotBookingSectionPropsType {
-  onSelectSlot: (slot: TimeSlot) => void;
-  availableDays: resultType[];
-}
+import { useState } from "react";
 
 const SlotPicker = ({
   onSelectSlot,
   availableDays,
-}: SlotBookingSectionPropsType) => {
+}: SlotBookingSectionProps) => {
   // Find first day with slots as default tab
   const firstDayWithSlots =
     availableDays.find((day) => day.slots.length > 0)?.date ||
